@@ -3,10 +3,11 @@ namespace ContentExtractService.Models
 {
     public class Expense
     {
-        String CostCentre { get; set; }
-        Decimal Total { get; set; }
-        String PaymentMethod { get; set; }
-        Decimal GST { get; set; }
-        Decimal TotalExcludingGST { get; set; }
+        public int id { get; set; }
+        public String CostCentre { get; set; }
+        public Decimal Total { get; set; }
+        public String PaymentMethod { get; set; }
+        public Decimal GST { get; set; }
+        public Decimal TotalExcludingGST { get; set; }
     }
 }

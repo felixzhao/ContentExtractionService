@@ -3,10 +3,10 @@ namespace ContentExtractService.Models
 {
     public class RelevantData
     {
-        Expense expense { get; set; }
-        String Vendor { get; set; }
-        String Description { get; set; }
-        DateTime Date { get; set; }
-        String Email { get; set; }
+        public Expense expense { get; set; }
+        public String Vendor { get; set; }
+        public String Description { get; set; }
+        public DateTime Date { get; set; }
+        public String Email { get; set; }
     }
 }
