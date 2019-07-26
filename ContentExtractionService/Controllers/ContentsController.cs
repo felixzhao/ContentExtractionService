@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -72,45 +73,88 @@ namespace ContentExtractionService.Controllers
             string mixed = content;
             string xml = "<FOO>" + mixed + "</FOO>";
 
-            XDocument dox = XDocument.Parse(xml);
-            var total = dox.Descendants().Where(n => n.Name == "total").FirstOrDefault();
+            RelevantData relevantData;
 
-
-            if (total == null)
+            if(GetRelevantData(xml, out relevantData))
             {
-                return GetRejectResponse(response);
-            }
-
-
-
-            Decimal gst_rate = 1.15M;
-            Decimal total_value;
-            if (Decimal.TryParse(total.Value, out total_value))
-            {
-
-                var totalExcludingGst = Decimal.Round(Decimal.Divide(total_value, gst_rate), 2);
-                var gst = total_value - totalExcludingGst;
-
-                response.expense = new Expense
-                {
-                    Total = total_value,
-                    GST = gst,
-                    TotalExcludingGST = totalExcludingGst
-                };
-
+                return GetOkResponse(response, relevantData);
             }
             else
             {
                 return GetRejectResponse(response);
             }
+        }
 
-            return response;
+        private bool GetRelevantData (string content, out RelevantData relevantData)
+        {
+            relevantData = new RelevantData();
+
+            XDocument dox = XDocument.Parse(content);
+            var total = GetElementValue(dox, "total");
+
+            if (String.IsNullOrEmpty(total))
+            {
+                return false;
+            }
+
+            Decimal gst_rate = 1.15M;
+            Decimal total_value;
+            if (Decimal.TryParse(total, out total_value))
+            {
+                var costCentre = GetElementValue(dox, "cost_centre");
+
+                var totalExcludingGst = Decimal.Round(Decimal.Divide(total_value, gst_rate), 2);
+                var gst = total_value - totalExcludingGst;
+
+                relevantData.Expense = new Expense
+                {
+                    Total = total_value,
+                    GST = gst,
+                    TotalExcludingGST = totalExcludingGst,
+                    CostCentre = String.IsNullOrEmpty(costCentre) ? "UNKNOWN": costCentre,
+                    PaymentMethod = GetElementValue(dox, "payment_method")
+                };
+
+            }
+            else
+            {
+                return false;
+            }
+
+            relevantData.Vendor = GetElementValue(dox, "vendor");
+            relevantData.Description = GetElementValue(dox, "description");
+            var dateText = GetElementValue(dox, "date");
+
+            string pattern = "dddd dd MMMM yyyy";
+            DateTime dt;
+            if (DateTime.TryParseExact(dateText, pattern, CultureInfo.InvariantCulture,
+                                       DateTimeStyles.None,
+                                       out dt))
+            {
+                relevantData.Date = dt;
+            }
+
+            return true;
+        }
+
+        private String GetElementValue(XDocument dox, String name)
+        {
+            var element = dox.Descendants().Where(n => n.Name == name).FirstOrDefault();
+            return element == null ? String.Empty : element.Value.ToString();
         }
 
         private Response GetRejectResponse(Response response)
         {
             response.StatusCode = 0;
             response.StatusDescription = "reject";
+            return response;
+        }
+
+        private Response GetOkResponse(Response response, RelevantData relevantData)
+        {
+            response.RelevantData = relevantData;
+            response.StatusCode = 1;
+            response.StatusDescription = "ok";
             return response;
         }
     }
