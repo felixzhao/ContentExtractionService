@@ -21,4 +21,12 @@
     <Compile Remove="Models\1.cs" />
     <Compile Remove="Models\2.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ContentExtractionService.ToolBox\ContentExtractionService.ToolBox.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Config\log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

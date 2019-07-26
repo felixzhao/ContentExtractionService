@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using ContentExtractionService.Models;
+using ContentExtractionService.ToolBox.Logger;
 using ContentExtractService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -140,7 +141,7 @@ namespace ContentExtractionService.Controllers
             }
             catch (System.Xml.XmlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Logger.Log(String.Format("Input Content Format Error, {0}", ex.Message));
                 return false;
             }
 
