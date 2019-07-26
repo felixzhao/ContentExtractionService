@@ -3,7 +3,7 @@ namespace ContentExtractService.Models
 {
     public class Expense
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public String CostCentre { get; set; }
         public Decimal Total { get; set; }
         public String PaymentMethod { get; set; }
