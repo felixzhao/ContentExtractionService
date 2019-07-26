@@ -75,7 +75,7 @@ namespace ContentExtractionService.Controllers
 
             RelevantData relevantData;
 
-            if(GetRelevantData(xml, out relevantData))
+            if (GetRelevantData(xml, out relevantData))
             {
                 return GetOkResponse(response, relevantData);
             }
@@ -85,53 +85,63 @@ namespace ContentExtractionService.Controllers
             }
         }
 
-        private bool GetRelevantData (string content, out RelevantData relevantData)
+        private bool GetRelevantData(string content, out RelevantData relevantData)
         {
             relevantData = new RelevantData();
 
-            XDocument dox = XDocument.Parse(content);
-            var total = GetElementValue(dox, "total");
-
-            if (String.IsNullOrEmpty(total))
+            try
             {
-                return false;
-            }
+                XDocument dox = XDocument.Parse(content);
 
-            Decimal gst_rate = 1.15M;
-            Decimal total_value;
-            if (Decimal.TryParse(total, out total_value))
-            {
-                var costCentre = GetElementValue(dox, "cost_centre");
 
-                var totalExcludingGst = Decimal.Round(Decimal.Divide(total_value, gst_rate), 2);
-                var gst = total_value - totalExcludingGst;
+                var total = GetElementValue(dox, "total");
 
-                relevantData.Expense = new Expense
+                if (String.IsNullOrEmpty(total))
                 {
-                    Total = total_value,
-                    GST = gst,
-                    TotalExcludingGST = totalExcludingGst,
-                    CostCentre = String.IsNullOrEmpty(costCentre) ? "UNKNOWN": costCentre,
-                    PaymentMethod = GetElementValue(dox, "payment_method")
-                };
+                    return false;
+                }
 
+                Decimal gst_rate = 1.15M;
+                Decimal total_value;
+                if (Decimal.TryParse(total, out total_value))
+                {
+                    var costCentre = GetElementValue(dox, "cost_centre");
+
+                    var totalExcludingGst = Decimal.Round(Decimal.Divide(total_value, gst_rate), 2);
+                    var gst = total_value - totalExcludingGst;
+
+                    relevantData.Expense = new Expense
+                    {
+                        Total = total_value,
+                        GST = gst,
+                        TotalExcludingGST = totalExcludingGst,
+                        CostCentre = String.IsNullOrEmpty(costCentre) ? "UNKNOWN" : costCentre,
+                        PaymentMethod = GetElementValue(dox, "payment_method")
+                    };
+
+                }
+                else
+                {
+                    return false;
+                }
+
+                relevantData.Vendor = GetElementValue(dox, "vendor");
+                relevantData.Description = GetElementValue(dox, "description");
+                var dateText = GetElementValue(dox, "date");
+
+                string pattern = "dddd dd MMMM yyyy";
+                DateTime dt;
+                if (DateTime.TryParseExact(dateText, pattern, CultureInfo.InvariantCulture,
+                                           DateTimeStyles.None,
+                                           out dt))
+                {
+                    relevantData.Date = dt;
+                }
             }
-            else
+            catch (System.Xml.XmlException ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
-            }
-
-            relevantData.Vendor = GetElementValue(dox, "vendor");
-            relevantData.Description = GetElementValue(dox, "description");
-            var dateText = GetElementValue(dox, "date");
-
-            string pattern = "dddd dd MMMM yyyy";
-            DateTime dt;
-            if (DateTime.TryParseExact(dateText, pattern, CultureInfo.InvariantCulture,
-                                       DateTimeStyles.None,
-                                       out dt))
-            {
-                relevantData.Date = dt;
             }
 
             return true;
