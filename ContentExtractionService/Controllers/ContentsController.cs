@@ -50,27 +50,27 @@ namespace ContentExtractionService.Controllers
         {
             try
             {
-                String content = request.EmailContent;
+				Logger.LogIn();
 
-
+				String content = request.EmailContent;
                 Response response = GetResponse(content);
                 _context.Responses.Add(response);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetResponse), new { guid = response.TraceId }, response);
+
+				Logger.LogOut();
+
+				return CreatedAtAction(nameof(GetResponse), new { guid = response.TraceId }, response);
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
-                throw;
-            }
-
-
+				Logger.LogException(ex);
+				return GetFailResponse();
+			}
         }
-
 
         private Response GetResponse(String content)
         {
-            Response response = new Response();
+            
             string mixed = content;
             string xml = "<FOO>" + mixed + "</FOO>";
 
@@ -78,17 +78,19 @@ namespace ContentExtractionService.Controllers
 
             if (GetRelevantData(xml, out relevantData))
             {
-                return GetOkResponse(response, relevantData);
+                return GetOkResponse(relevantData);
             }
             else
             {
-                return GetRejectResponse(response);
+                return GetRejectResponse();
             }
         }
 
         private bool GetRelevantData(string content, out RelevantData relevantData)
         {
-            relevantData = new RelevantData();
+			
+
+			relevantData = new RelevantData();
 
             try
             {
@@ -141,11 +143,12 @@ namespace ContentExtractionService.Controllers
             }
             catch (System.Xml.XmlException ex)
             {
-                Logger.Log(String.Format("Input Content Format Error, {0}", ex.Message));
-                return false;
-            }
+				Logger.Log(" >>>>>> Input xml Data has format error <<<<<< " + ex.Message);
+				return false;
+			}
 
-            return true;
+			
+			return true;
         }
 
         private String GetElementValue(XDocument dox, String name)
@@ -154,19 +157,29 @@ namespace ContentExtractionService.Controllers
             return element == null ? String.Empty : element.Value.ToString();
         }
 
-        private Response GetRejectResponse(Response response)
+        private Response GetRejectResponse()
         {
-            response.StatusCode = 0;
+			Response response = new Response();
+			response.StatusCode = 0;
             response.StatusDescription = "reject";
             return response;
         }
 
-        private Response GetOkResponse(Response response, RelevantData relevantData)
+        private Response GetOkResponse(RelevantData relevantData)
         {
-            response.RelevantData = relevantData;
+			Response response = new Response();
+			response.RelevantData = relevantData;
             response.StatusCode = 1;
             response.StatusDescription = "ok";
             return response;
         }
-    }
+
+		private Response GetFailResponse()
+		{
+			Response response = new Response();
+			response.StatusCode = 2;
+			response.StatusDescription = "Something wrong in Service. Please Contact Supporters. ";
+			return response;
+		}
+	}
 }

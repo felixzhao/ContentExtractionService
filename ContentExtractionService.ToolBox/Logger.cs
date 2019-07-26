@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using log4net;
 using log4net.Config;
@@ -44,13 +45,90 @@ namespace ContentExtractionService.ToolBox.Logger
             return configFile;
         }
 
-        public static void Log(string message)
+        public static void Log(
+    string message, LogType type = LogType.Debug,
+    [CallerFilePath] string path = @"C:\Unknown.cs", [CallerLineNumber] int line = 0, [CallerMemberName] string method = ""
+    )
+        {
+            // Add the caller file information
+            message = $"{PrefixLog(path, line, method)} {message}";
+
+            ProcessLog(message, type);
+        }
+
+        public static void LogIn(
+    string message = "",
+    [CallerFilePath] string path = @"C:\Unknown.cs", [CallerLineNumber] int line = 0, [CallerMemberName] string method = "")
+        {
+            var prefix = PrefixLog(path, line, method);
+
+            ProcessLog($"{prefix} >>>>>>>>>> IN >>>>>>>>>>", LogType.Debug);
+
+            // Extra message to add?
+            if (!string.IsNullOrWhiteSpace(message))
+                ProcessLog($"{prefix} {message}", LogType.Debug);
+        }
+
+        public static void LogOut(
+            string message = "",
+            [CallerFilePath] string path = @"C:\Unknown.cs", [CallerLineNumber] int line = 0, [CallerMemberName] string method = "")
+        {
+            var prefix = PrefixLog(path, line, method);
+
+            // Extra message to add?
+            if (!string.IsNullOrWhiteSpace(message))
+                ProcessLog($"{prefix} {message}", LogType.Debug);
+
+            ProcessLog($"{prefix} <<<<<<<<<< OUT <<<<<<<<<<", LogType.Debug);
+        }
+
+        public static void LogException(
+            Exception exception, LogType type = LogType.Error,
+            [CallerFilePath] string path = @"C:\Unknown.cs", [CallerLineNumber] int line = 0, [CallerMemberName] string method = "")
+        {
+            var prefix = PrefixLog(path, line, method);
+
+            ProcessLog($"{prefix} [EXCEPTION] - Message: {exception.Message}", type);
+
+            // Log every inner exception too
+            while (exception.InnerException != null)
+            {
+                ProcessLog($"{prefix} [INNER EXCEPTION] - Message: {exception.Message}", type);
+
+                exception = exception.InnerException;
+            }
+        }
+
+        private static string PrefixLog(string path, int line, string method)
+        {
+            var file = new FileInfo(path);
+
+            return $"{file.Name}:{line} ({method})";
+        }
+
+        private static void ProcessLog(string message, LogType type)
         {
             EnsureLogger();
 
-            _log.Debug($"Test log: {message}");
+            switch (type)
+            {
+                case LogType.Fatal:
+                    _log.Fatal(message);
+                    break;
+                case LogType.Error:
+                    _log.Error(message);
+                    break;
+                case LogType.Warn:
+                    _log.Warn(message);
+                    break;
+                case LogType.Info:
+                    _log.Info(message);
+                    break;
+                case LogType.Debug:
+                default:
+                    _log.Debug(message);
+                    break;
+            }
         }
     }
-
-   
 }
