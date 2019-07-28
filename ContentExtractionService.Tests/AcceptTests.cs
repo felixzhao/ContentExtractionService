@@ -278,13 +278,9 @@ Ivan";
             Assert.NotNull(actual.TraceId);
             Assert.NotNull(actual.RelevantData);
 
-            Assert.AreEqual(expected.RelevantData.Date, actual.RelevantData.Date);
-            Assert.AreEqual(expected.RelevantData.Description, actual.RelevantData.Description);
-            Assert.AreEqual(expected.RelevantData.Vendor, actual.RelevantData.Vendor);
-
             Assert.NotNull(actual.RelevantData.Expense);
-            Assert.AreEqual(expected.RelevantData.Expense.CostCentre, actual.RelevantData.Expense.CostCentre);
-            Assert.AreEqual(expected.RelevantData.Expense.PaymentMethod, actual.RelevantData.Expense.PaymentMethod);
+            
+            
             Assert.AreEqual(expected.RelevantData.Expense.Total, actual.RelevantData.Expense.Total);
             Assert.AreEqual(expected.RelevantData.Expense.TotalExcludingGST, actual.RelevantData.Expense.TotalExcludingGST);
             Assert.AreEqual(expected.RelevantData.Expense.GST, actual.RelevantData.Expense.GST);
