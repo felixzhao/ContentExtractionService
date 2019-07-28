@@ -22,12 +22,12 @@ namespace ContentExtractionService.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IContentExtractor _contentExtractor;
+        
         public ContentsController(IMapper mapper, IContentExtractor contentExtractor)
         {
             _mapper = mapper;
             _contentExtractor = contentExtractor;
         }
-
 
         // POST: api/contents/
         [HttpPost]
@@ -53,7 +53,7 @@ namespace ContentExtractionService.Controllers
             catch (Exception ex)
             {
                 Log.Error(ex, "Get Exception during process.");
-                return BadRequest();
+                return StatusCode(500);
             }
         }
 	}
