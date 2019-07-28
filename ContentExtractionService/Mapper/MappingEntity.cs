@@ -11,10 +11,10 @@ namespace ContentExtractionService
     {
         public MappingEntity()
         {
-            CreateMap<RelevantData, RelevantDataBO>();
-            CreateMap<Expense, ExpenseBO>();
+            //CreateMap<RelevantData, RelevantDataBO>();
+            //CreateMap<Expense, ExpenseBO>();
 
-            CreateMap<RelevantDataBO, RelevantData>();
+            CreateMap<RelevantDataBO, Response>();
             CreateMap<ExpenseBO, Expense>();
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BusinessLayer;
 using ContentExtractionService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,7 @@ namespace ContentExtractionService
                         .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
                         .CreateLogger();
 
+            services.AddScoped<IContentExtractor, ContentExtractor>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
