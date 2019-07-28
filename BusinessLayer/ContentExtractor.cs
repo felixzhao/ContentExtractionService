@@ -22,25 +22,24 @@ namespace BusinessLayer
             {
                 XDocument dox = XDocument.Parse(xml);
 
+                var totalString = GetElementValue(dox, "total");
 
-                var total = GetElementValue(dox, "total");
-
-                if (String.IsNullOrEmpty(total))
+                if (String.IsNullOrEmpty(totalString))
                 {
                     Log.Warning("Input data has no total value.");
                     return false;
                 }
 
-                decimal total_value;
-                if (decimal.TryParse(total, out total_value))
+                decimal total;
+                if (decimal.TryParse(totalString, out total))
                 {
                     var costCentre = GetElementValue(dox, "cost_centre");
 
-                    var totalExcludingGst = PriceCalculator.GetTotalExcludingGst(total_value);
-                    var gst = PriceCalculator.GetGST(total_value, totalExcludingGst);
+                    var totalExcludingGst = PriceCalculator.GetTotalExcludingGst(total);
+                    var gst = PriceCalculator.GetGST(total, totalExcludingGst);
                     relevantData.Expense = new ExpenseBO
                     {
-                        Total = total_value,
+                        Total = total,
                         GST = gst,
                         TotalExcludingGST = totalExcludingGst,
                         CostCentre = String.IsNullOrEmpty(costCentre) ? "UNKNOWN" : costCentre,
