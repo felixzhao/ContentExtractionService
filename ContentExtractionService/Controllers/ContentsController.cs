@@ -22,7 +22,7 @@ namespace ContentExtractionService.Controllers
             
         }
 
-        // POST: api/Todo
+        // POST: api/contents/
         [HttpPost]
         public IActionResult Extract2(Request request)
         {
