@@ -41,10 +41,12 @@ namespace ContentExtractionService.Controllers
                 if (_contentExtractor.GetRelevantData(content, out relevantDataBO))
                 {
                     var response = _mapper.Map<Response>(relevantDataBO);
+                    Log.Debug<string>("Extract Done.", content);
                     return Ok(response);
                 }
                 else
                 {
+                    Log.Debug<string>("Extract Failed.", content);
                     return BadRequest();
                 }
             }

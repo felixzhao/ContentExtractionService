@@ -1,0 +1,27 @@
+2019-07-28 22:58:12.066 +12:00 [WRN] Input xml Data has format error
+System.Xml.XmlException: The '@' character, hexadecimal value 0x40, cannot be included in a name. Line 1, position 8.
+   at System.Xml.XmlTextReaderImpl.Throw(Exception e)
+   at System.Xml.XmlTextReaderImpl.Throw(String res, String[] args)
+   at System.Xml.XmlTextReaderImpl.ParseElement()
+   at System.Xml.XmlTextReaderImpl.ParseElementContent()
+   at System.Xml.XmlTextReaderImpl.Read()
+   at System.Xml.Linq.XContainer.ReadContentFrom(XmlReader r)
+   at System.Xml.Linq.XContainer.ReadContentFrom(XmlReader r, LoadOptions o)
+   at System.Xml.Linq.XDocument.Load(XmlReader reader, LoadOptions options)
+   at System.Xml.Linq.XDocument.Parse(String text, LoadOptions options)
+   at System.Xml.Linq.XDocument.Parse(String text)
+   at BusinessLayer.ContentExtractor.GetRelevantData(String content, RelevantDataBO& relevantData) in /Users/study/Documents/WorkSpace/ContentExtractionService/BusinessLayer/ContentExtractor.cs:line 23
+2019-07-28 23:05:37.473 +12:00 [WRN] Input xml Data has format error
+System.Xml.XmlException: The '@' character, hexadecimal value 0x40, cannot be included in a name. Line 1, position 8.
+   at System.Xml.XmlTextReaderImpl.Throw(Exception e)
+   at System.Xml.XmlTextReaderImpl.Throw(String res, String[] args)
+   at System.Xml.XmlTextReaderImpl.ParseElement()
+   at System.Xml.XmlTextReaderImpl.ParseElementContent()
+   at System.Xml.XmlTextReaderImpl.Read()
+   at System.Xml.Linq.XContainer.ReadContentFrom(XmlReader r)
+   at System.Xml.Linq.XContainer.ReadContentFrom(XmlReader r, LoadOptions o)
+   at System.Xml.Linq.XDocument.Load(XmlReader reader, LoadOptions options)
+   at System.Xml.Linq.XDocument.Parse(String text, LoadOptions options)
+   at System.Xml.Linq.XDocument.Parse(String text)
+   at BusinessLayer.ContentExtractor.GetRelevantData(String content, RelevantDataBO& relevantData) in /Users/study/Documents/WorkSpace/ContentExtractionService/BusinessLayer/ContentExtractor.cs:line 23
+2019-07-28 23:06:00.021 +12:00 [WRN] Input data has no total value.

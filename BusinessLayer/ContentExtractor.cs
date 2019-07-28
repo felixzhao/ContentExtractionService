@@ -3,30 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using BusinessEntities;
+using Serilog;
 
 namespace BusinessLayer
 {
     public class ContentExtractor : IContentExtractor
     {
-        
-        //private Response GetResponse(String content)
-        //{
-
-        //    string mixed = content;
-        //    string xml = "<FOO>" + mixed + "</FOO>";
-
-        //    RelevantData relevantData;
-
-        //    if (GetRelevantData(xml, out relevantData))
-        //    {
-        //        return GetOkResponse(relevantData);
-        //    }
-        //    else
-        //    {
-        //        return GetRejectResponse();
-        //    }
-        //}
-
         public bool GetRelevantData(string content, out RelevantDataBO relevantData)
         {
 
@@ -45,6 +27,7 @@ namespace BusinessLayer
 
                 if (String.IsNullOrEmpty(total))
                 {
+                    Log.Warning("Input data has no total value.");
                     return false;
                 }
 
@@ -87,8 +70,7 @@ namespace BusinessLayer
             }
             catch (System.Xml.XmlException ex)
             {
-                
-                //Logger.Log(" >>>>>> Input xml Data has format error <<<<<< " + ex.Message);
+                Log.Warning(ex, "Input xml Data has format error");
                 return false;
             }
 
