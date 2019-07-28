@@ -25,6 +25,26 @@ namespace XUnitTests
         }
 
         [Fact]
+        public void InvalidDate()
+        {
+            string content = @"abc
+<expense>
+<total>1024.01</total>
+</expense>
+adfd
+<date>Monday 27 April 2017</date>.
+Regards,
+Ivan";
+
+            IContentExtractor extractor = new ContentExtractor();
+            RelevantDataBO actual;
+            var result = extractor.GetRelevantData(content, out actual);
+            Assert.True(result);
+            Assert.NotNull(actual);                       
+            Assert.Equal(DateTime.MinValue,actual.Date);
+        }
+
+        [Fact]
         public void PassTest1()
         {
             string content = @"Hi Yvaine,

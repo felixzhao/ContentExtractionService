@@ -11,6 +11,7 @@ namespace XUnitTests
         [InlineData(@"abc")]
         [InlineData(@"abc<total>123efg")]
         [InlineData(@"abc<abc@gmail.com>123efg")]
+        [InlineData(@"abc<total>efg</total>123efg")]
         public void SuccessTest(string content)
         {
             IContentExtractor extractor = new ContentExtractor();
