@@ -6,13 +6,17 @@ using ContentExtractService.Models;
 
 namespace ContentExtractionService
 {
-    
-        public class MappingEntity : Profile
+
+    public class MappingEntity : Profile
+    {
+        public MappingEntity()
         {
-            public MappingEntity()
-            {
-                CreateMap<RelevantData, RelevantDataBO >();
-            }
+            CreateMap<RelevantData, RelevantDataBO>();
+            CreateMap<Expense, ExpenseBO>();
+
+            CreateMap<RelevantDataBO, RelevantData>();
+            CreateMap<ExpenseBO, Expense>();
         }
-    
+    }
+
 }

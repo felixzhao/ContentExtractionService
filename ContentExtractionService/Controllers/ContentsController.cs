@@ -4,11 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using BusinessEntities;
 using ContentExtractionService.Models;
 using ContentExtractService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using BusinessLayer;
+using AutoMapper;
 
 namespace ContentExtractionService.Controllers
 {
@@ -17,6 +20,13 @@ namespace ContentExtractionService.Controllers
     [ApiController]
     public class ContentsController : ControllerBase
     {
+        private readonly IMapper _mapper;
+        public ContentsController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+
         // POST: api/contents/
         [HttpPost]
         public IActionResult Extract2(Request request)
@@ -27,6 +37,23 @@ namespace ContentExtractionService.Controllers
                 
 
                 String content = request.EmailContent;
+
+                RelevantDataBO relevantDataBO = new RelevantDataBO()
+                {
+                    Expense = new ExpenseBO()
+                    {
+                         CostCentre="abc"
+                    }
+                };
+                //if (GetRelevantData(content, out relevantDataBO))
+                //{
+
+
+
+                    var contact = _mapper.Map<RelevantData>(relevantDataBO);
+                //}
+
+
                 Response response = GetResponse(content);
 
                 
