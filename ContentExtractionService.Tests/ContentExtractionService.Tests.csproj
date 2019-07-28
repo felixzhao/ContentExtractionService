@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ContentExtractionService\ContentExtractionService.csproj" />
-    <ProjectReference Include="..\ContentExtractionService.ToolBox\ContentExtractionService.ToolBox.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" />

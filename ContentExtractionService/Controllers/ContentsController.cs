@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using ContentExtractionService.Models;
-using ContentExtractionService.ToolBox.Logger;
 using ContentExtractService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace ContentExtractionService.Controllers
 {
@@ -17,29 +17,25 @@ namespace ContentExtractionService.Controllers
     [ApiController]
     public class ContentsController : ControllerBase
     {
-        public ContentsController()
-        {
-            
-        }
-
         // POST: api/contents/
         [HttpPost]
         public IActionResult Extract2(Request request)
         {
             try
             {
-                Logger.LogIn();
+                
+                
 
                 String content = request.EmailContent;
                 Response response = GetResponse(content);
 
-                Logger.LogOut();
+                
 
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Log.Error(ex, "Get Exception during process.");
                 return BadRequest();
             }
         }
@@ -119,7 +115,7 @@ namespace ContentExtractionService.Controllers
             }
             catch (System.Xml.XmlException ex)
             {
-				Logger.Log(" >>>>>> Input xml Data has format error <<<<<< " + ex.Message);
+				//Logger.Log(" >>>>>> Input xml Data has format error <<<<<< " + ex.Message);
 				return false;
 			}
 
