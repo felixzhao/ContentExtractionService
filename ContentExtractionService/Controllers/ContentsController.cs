@@ -17,62 +17,10 @@ namespace ContentExtractionService.Controllers
     [ApiController]
     public class ContentsController : ControllerBase
     {
-        //private readonly ResponseContext _context;
-
         public ContentsController()
         {
             
         }
-
-        //public ContentsController(ResponseContext context)
-        //{
-        //    _context = context;
-
-        //    if (_context.Responses.Count() == 0)
-        //    {
-        //        _context.Responses.Add(new Response { TraceId = Guid.NewGuid() });
-        //        _context.SaveChanges();
-        //    }
-        //}
-
-        //// GET: api/Todo
-        //[HttpGet("{guid}")]
-        //public async Task<ActionResult<Response>> GetResponse(Guid guid)
-        //{
-        //    var todoItem = await _context.Responses.FindAsync(guid);
-
-        //    if (todoItem == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return todoItem;
-        //}
-
-   //     // POST: api/Todo
-   //     [HttpPost]
-   //     public async Task<ActionResult<Response>> Extract(Request request)
-   //     {
-   //         try
-   //         {
-			//	Logger.LogIn();
-
-			//	String content = request.EmailContent;
-   //             Response response = GetResponse(content);
-   //             _context.Responses.Add(response);
-   //             await _context.SaveChangesAsync();
-
-			//	Logger.LogOut();
-
-			//	return CreatedAtAction(nameof(GetResponse), new { guid = response.TraceId }, response);
-   //         }
-   //         catch (Exception ex)
-   //         {
-			//	Logger.LogException(ex);
-			//	return GetFailResponse();
-			//}
-   //     }
-
 
         // POST: api/Todo
         [HttpPost]
@@ -84,8 +32,6 @@ namespace ContentExtractionService.Controllers
 
                 String content = request.EmailContent;
                 Response response = GetResponse(content);
-                //_context.Responses.Add(response);
-                //await _context.SaveChangesAsync();
 
                 Logger.LogOut();
 
@@ -203,13 +149,5 @@ namespace ContentExtractionService.Controllers
             response.StatusDescription = "ok";
             return response;
         }
-
-		//private Response GetFailResponse()
-		//{
-		//	Response response = new Response();
-		//	response.StatusCode = 2;
-		//	response.StatusDescription = "Something wrong in Service. Please Contact Supporters. ";
-		//	return response;
-		//}
 	}
 }
