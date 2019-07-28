@@ -31,15 +31,13 @@ namespace BusinessLayer
                     return false;
                 }
 
-                decimal gst_rate = 1.15M;
                 decimal total_value;
                 if (decimal.TryParse(total, out total_value))
                 {
                     var costCentre = GetElementValue(dox, "cost_centre");
 
-                    var totalExcludingGst = decimal.Round(Decimal.Divide(total_value, gst_rate), 2);
-                    var gst = total_value - totalExcludingGst;
-
+                    var totalExcludingGst = PriceCalculator.GetTotalExcludingGst(total_value);
+                    var gst = PriceCalculator.GetGST(total_value, totalExcludingGst);
                     relevantData.Expense = new ExpenseBO
                     {
                         Total = total_value,
@@ -48,10 +46,10 @@ namespace BusinessLayer
                         CostCentre = String.IsNullOrEmpty(costCentre) ? "UNKNOWN" : costCentre,
                         PaymentMethod = GetElementValue(dox, "payment_method")
                     };
-
                 }
                 else
                 {
+                    Log.Warning("Input total value is invalid.");
                     return false;
                 }
 
