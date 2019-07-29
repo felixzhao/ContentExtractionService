@@ -1,0 +1,1 @@
+2019-07-29 12:20:41.103 +12:00 [WRN] Input data has no total value.
