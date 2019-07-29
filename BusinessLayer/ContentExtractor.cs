@@ -7,12 +7,19 @@ using Serilog;
 
 namespace BusinessLayer
 {
+    /// <summary>
+    /// Class for Extract Content to Business Object
+    /// </summary>
     public class ContentExtractor : IContentExtractor
     {
+        /// <summary>
+        /// Extract relevant data from plain text
+        /// </summary>
+        /// <param name="content">plain text</param>
+        /// <param name="relevantData">Business Object of structural content data</param>
+        /// <returns>Success: return true; Fail: return false</returns>
         public bool GetRelevantData(string content, out RelevantDataBO relevantData)
         {
-
-
             relevantData = new RelevantDataBO();
 
             string mixed = content;
@@ -26,6 +33,7 @@ namespace BusinessLayer
 
                 if (String.IsNullOrEmpty(totalString))
                 {
+                    // if no total, reject request.
                     Log.Warning("Input data has no total value.");
                     return false;
                 }
@@ -48,6 +56,7 @@ namespace BusinessLayer
                 }
                 else
                 {
+                    // if total is not number, reject request.
                     Log.Warning("Input total value is invalid.");
                     return false;
                 }
@@ -56,6 +65,7 @@ namespace BusinessLayer
                 relevantData.Description = GetElementValue(dox, "description");
                 var dateText = GetElementValue(dox, "date");
 
+                // Get date based on custom format
                 string pattern = "dddd dd MMMM yyyy";
                 DateTime dt;
                 if (DateTime.TryParseExact(dateText, pattern, CultureInfo.InvariantCulture,
@@ -75,6 +85,12 @@ namespace BusinessLayer
             return true;
         }
 
+        /// <summary>
+        /// Get Element value from XDocument
+        /// </summary>
+        /// <param name="dox">XDocument Object</param>
+        /// <param name="name">Element Name</param>
+        /// <returns>Value of Element</returns>
         private String GetElementValue(XDocument dox, String name)
         {
             var element = dox.Descendants().Where(n => n.Name == name).FirstOrDefault();

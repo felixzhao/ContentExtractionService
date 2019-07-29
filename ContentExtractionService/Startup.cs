@@ -30,12 +30,16 @@ namespace ContentExtractionService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // configuration for Serilog
             Log.Logger = new LoggerConfiguration()
                         .WriteTo.Console()
                         .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
                         .CreateLogger();
 
+            // Add Dependency Injection for ContentExtractor
             services.AddScoped<IContentExtractor, ContentExtractor>();
+
+            // configuration for AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

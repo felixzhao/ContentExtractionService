@@ -6,7 +6,9 @@ using ContentExtractService.Models;
 
 namespace ContentExtractionService
 {
-
+    /// <summary>
+    /// Auto Mapping BO to Contract
+    /// </summary>
     public class MappingEntity : Profile
     {
         public MappingEntity()

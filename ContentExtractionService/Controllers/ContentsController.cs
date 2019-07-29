@@ -40,18 +40,21 @@ namespace ContentExtractionService.Controllers
 
                 if (_contentExtractor.GetRelevantData(content, out relevantDataBO))
                 {
+                    // Extract Success. Mapping BO to Contract.
                     var response = _mapper.Map<Response>(relevantDataBO);
                     Log.Debug<string>("Extract Done.", content);
                     return Ok(response);
                 }
                 else
                 {
+                    // Extract Fail. Because of invalid data.
                     Log.Debug<string>("Extract Failed.", content);
                     return BadRequest();
                 }
             }
             catch (Exception ex)
             {
+                // Fail. Because of Internal Server Error.
                 Log.Error(ex, "Get Exception during process.");
                 return StatusCode(500);
             }
