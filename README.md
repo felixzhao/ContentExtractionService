@@ -1,5 +1,5 @@
 # ContentExtractionService
-This project works to extract content from plain text input.
+This project aims to create a RESTFUL API service to extract content from plain text input.
 
 There are several techs are used in this project:
 1. DotNet Core Web API
