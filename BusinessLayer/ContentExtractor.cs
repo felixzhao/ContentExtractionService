@@ -79,6 +79,10 @@ namespace BusinessLayer
             {
                 Log.Warning(ex, "Input xml Data has format error");
                 return false;
+            }catch(ArgumentOutOfRangeException ex)
+            {
+                Log.Warning(ex, ex.Message);
+                throw;
             }
 
 

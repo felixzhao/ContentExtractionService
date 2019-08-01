@@ -7,6 +7,10 @@ namespace BusinessLayer
 
         public static decimal GetTotalExcludingGst(decimal total)
         {
+            if(total < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(total), "Total is negative!");
+            }
             return decimal.Round(decimal.Divide(total, gstRate), 2);
         }
 

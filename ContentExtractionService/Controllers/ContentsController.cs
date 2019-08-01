@@ -52,6 +52,12 @@ namespace ContentExtractionService.Controllers
                     return BadRequest();
                 }
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                // Argument Out Of Range
+                Log.Debug<string>("ArgumentOutOfRange", ex.Message);
+                return BadRequest();
+            }
             catch (Exception ex)
             {
                 // Fail. Because of Internal Server Error.
