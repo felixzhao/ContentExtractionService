@@ -16,7 +16,11 @@ namespace BusinessLayer
 
         public static decimal GetGST(decimal total, decimal totalExcludingGst)
         {
-            return total - totalExcludingGst;            
+            if (total < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(total), "Total is negative!");
+            }
+            return decimal.Round(total - totalExcludingGst, 2);            
         }
     }
 }
