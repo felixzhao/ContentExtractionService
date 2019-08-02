@@ -19,3 +19,6 @@ The data will either be:
 Development Environment:
 - Visual Studio 2019 for mac (Community) Version 8.2
 - macOS Sierra Version 10.12.6
+
+GST Calculate Results in Unit Tests based on gst online calculator:
+https://kiwitax.co.nz/gst-calculator/
