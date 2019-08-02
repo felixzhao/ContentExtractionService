@@ -25,8 +25,8 @@ namespace ContentExtractionService.Controllers
         
         public ContentsController(IMapper mapper, IContentExtractor contentExtractor)
         {
-            _mapper = mapper;
-            _contentExtractor = contentExtractor;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _contentExtractor = contentExtractor ?? throw new ArgumentNullException(nameof(contentExtractor));
         }
 
         // POST: api/contents/
@@ -61,7 +61,7 @@ namespace ContentExtractionService.Controllers
             catch (Exception ex)
             {
                 // Fail. Because of Internal Server Error.
-                Log.Error(ex, "Get Exception during process.");
+                Log.Error(ex, "Get unexpected exception during process.");
                 return StatusCode(500);
             }
         }
